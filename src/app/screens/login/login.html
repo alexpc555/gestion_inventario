@@ -1,0 +1,55 @@
+<div class="login-page">
+  <div class="card">
+    <div class="card-header">
+      <div class="logo-wrap">
+        <!-- Icono tipo "Package" (similar a lucide) -->
+        <div class="logo">
+          <svg viewBox="0 0 24 24" aria-hidden="true" class="logo-icon">
+            <path d="M21 8.5V16a2 2 0 0 1-1 1.73l-7 4a2 2 0 0 1-2 0l-7-4A2 2 0 0 1 3 16V8.5" fill="none"
+              stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M3.3 7.2 12 12l8.7-4.8M12 12v9.5" fill="none" stroke="currentColor" stroke-width="1.8"
+              stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M7.5 4.8 12 7.2l4.5-2.4" fill="none" stroke="currentColor" stroke-width="1.8"
+              stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </div>
+      </div>
+
+      <div class="title-wrap">
+        <h1>Sistema de Inventario</h1>
+        <p>Ingresa tus credenciales para acceder</p>
+      </div>
+    </div>
+
+    <div class="card-content">
+      <form (ngSubmit)="onSubmit()" #f="ngForm" class="form">
+        <div class="field">
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" required [(ngModel)]="email" placeholder="admin@inventory.com" />
+        </div>
+
+        <div class="field">
+          <label for="password">Contraseña</label>
+          <input id="password" name="password" type="password" required [(ngModel)]="password" placeholder="••••••••" />
+        </div>
+
+
+        <button class="btn" type="submit" [disabled]="f.invalid">
+          Iniciar Sesión
+        </button>
+
+        <p class="footer">
+          ¿No tienes cuenta?
+          <a routerLink="/registro">Regístrate</a>
+        </p>
+
+        <p class="footer">
+          dashboard
+          <a routerLink="/dashboard">Ir al dashboard</a>
+        </p>
+
+        <p class="demo">Demo: admin@inventory.com / admin123</p>
+      </form>
+    </div>
+  </div>
+</div>

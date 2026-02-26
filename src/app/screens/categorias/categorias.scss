@@ -1,0 +1,328 @@
+.page {
+  width: 100%;
+  padding: 18px;
+  background: #f6f7fb;
+  min-height: calc(100vh - 64px); /* si tienes topbar */
+}
+
+.head {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: flex-start;
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 16px;
+  padding: 16px 16px;
+}
+
+.title-area {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.head h1 {
+  margin: 0;
+  font-size: 32px;
+  letter-spacing: -0.02em;
+}
+
+.head p {
+  margin: 4px 0 0;
+  color: #717182;
+  font-size: 13px;
+}
+
+/* Buttons */
+.btn-primary {
+  height: 40px;
+  padding: 0 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(0,0,0,0.08);
+  background: #030213;
+  color: #fff;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 8px 18px rgba(3,2,19,0.12);
+}
+
+.btn-primary:hover { filter: brightness(1.05); }
+
+.btn-back {
+  height: 40px;
+  padding: 0 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(0,0,0,0.1);
+  background: #fff;
+  cursor: pointer;
+  font-weight: 800;
+  color: #0b0b14;
+}
+
+.btn-back:hover { background: #f2f3f7; }
+
+/* filters */
+.filters {
+  margin-top: 14px;
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 16px;
+  padding: 14px;
+}
+
+.search {
+  max-width: 520px;
+  height: 40px;
+  border-radius: 12px;
+  background: #f3f3f5;
+  border: 1px solid rgba(0,0,0,0.06);
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+}
+
+.search-icon {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(0,0,0,0.35);
+  border-radius: 50%;
+  position: relative;
+  margin-right: 10px;
+}
+
+.search-icon::after {
+  content: "";
+  position: absolute;
+  width: 8px;
+  height: 2px;
+  background: rgba(0,0,0,0.35);
+  right: -7px;
+  bottom: -4px;
+  transform: rotate(45deg);
+  border-radius: 2px;
+}
+
+.search input {
+  border: 0;
+  outline: none;
+  background: transparent;
+  width: 100%;
+  font-size: 13px;
+}
+
+/* table */
+.table-wrap {
+  margin-top: 14px;
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 12px 28px rgba(0,0,0,0.06);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.table th, .table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+  vertical-align: middle;
+}
+
+.table th {
+  text-align: left;
+  font-weight: 900;
+  background: #fbfbfd;
+}
+
+.table tbody tr:hover {
+  background: #fafafe;
+}
+
+.right { text-align: right; }
+.center { text-align: center; }
+
+.name { font-weight: 900; color: #0b0b14; }
+.desc { color: #717182; }
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  height: 26px;
+  padding: 0 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(34,197,94,0.35);
+  background: rgba(34,197,94,0.08);
+  color: #16a34a;
+  font-weight: 900;
+  font-size: 12px;
+}
+
+.actions {
+  display: inline-flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.btn-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 12px;
+  border: 1px solid rgba(0,0,0,0.08);
+  background: #fff;
+  cursor: pointer;
+  position: relative;
+}
+
+/* dibujitos simples (sin emojis) */
+.btn-icon::before {
+  content: "";
+  width: 14px;
+  height: 14px;
+  display: block;
+  margin: auto;
+  background: rgba(3,2,19,0.55);
+  border-radius: 3px;
+}
+
+.btn-icon:hover { background: #f7f7fb; }
+
+.btn-icon.danger {
+  border-color: rgba(225,29,72,0.25);
+}
+
+.btn-icon.danger::before {
+  background: rgba(225,29,72,0.75);
+}
+
+.empty {
+  text-align: center;
+  padding: 22px 0;
+  color: #717182;
+}
+
+/* Reemplaza la clase .modal actual con esto: */
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(760px, calc(100vw - 24px));
+  background: #fff;
+  border-radius: 16px;
+  border: 1px solid rgba(0,0,0,0.08);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+  z-index: 10000; /* Aumentado */
+  max-height: 90vh; /* Evita que se salga de la pantalla */
+  overflow-y: auto; /* Scroll si es necesario */
+  display: block !important; /* Forzar visibilidad */
+  visibility: visible !important; /* Forzar visibilidad */
+  opacity: 1 !important; /* Forzar visibilidad */
+}
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(3,2,19,0.35);
+  z-index: 9999; /* El backdrop debajo del modal */
+  display: block !important;
+}
+
+/* Asegurar que el body no tenga overflow hidden */
+body {
+  overflow: auto !important;
+}
+
+
+.modal-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 16px;
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+  gap: 12px;
+  background: #fbfbfd;
+}
+
+.modal-title { font-weight: 900; font-size: 18px; }
+.modal-sub { margin-top: 3px; color: #717182; font-size: 13px; }
+
+.modal-x {
+  width: 34px;
+  height: 34px;
+  border-radius: 12px;
+  border: 1px solid rgba(0,0,0,0.08);
+  background: #fff;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+}
+
+.modal-body { padding: 16px; }
+
+.field { display: grid; gap: 8px; margin-bottom: 14px; }
+label { font-weight: 900; font-size: 13px; }
+.req { color: #e11d48; }
+
+input, textarea {
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid rgba(0,0,0,0.08);
+  background: #f3f3f5;
+  padding: 10px 12px;
+  outline: none;
+  font-size: 13px;
+  resize: none;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.btn {
+  height: 40px;
+  padding: 0 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(0,0,0,0.08);
+  background: #fff;
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.btn-danger {
+  height: 40px;
+  padding: 0 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(225,29,72,0.35);
+  background: #e11d48;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 900;
+}
+
+.confirm-text { margin: 0; color: #111827; }
+
+/* responsive */
+@media (max-width: 640px) {
+  .head { flex-direction: column; }
+  .btn-primary { width: 100%; }
+  .filters { padding: 12px; }
+  .search { max-width: none; }
+  .title-area { width: 100%; }
+  .btn-back { width: 100%; }
+}
+
+.page {
+  position: relative;
+  overflow: visible !important;
+}

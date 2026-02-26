@@ -1,0 +1,118 @@
+<div class="page">
+  <div class="head">
+  <div class="title-area">
+    <button class="btn-back" type="button" routerLink="/dashboard">
+      Volver
+    </button>
+
+    <div>
+      <h1>Categorías</h1>
+      <p>Organiza tus productos por categorías</p>
+    </div>
+  </div>
+
+  <button class="btn-primary" type="button" (click)="openCreate()">
+    Nueva Categoría
+  </button>
+</div>
+
+  <!-- Buscador -->
+  <div class="filters">
+    <div class="search">
+      <span class="search-icon" aria-hidden="true"></span>
+      <input
+        type="text"
+        placeholder="Buscar categorías..."
+        [(ngModel)]="searchTerm"
+      />
+    </div>
+  </div>
+
+  <!-- Tabla -->
+  <div class="table-wrap">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Descripción</th>
+          <th class="center">Estado</th>
+          <th class="right">Acciones</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngIf="filtered.length === 0">
+          <td colspan="4" class="empty">No se encontraron categorías</td>
+        </tr>
+
+        <tr *ngFor="let c of filtered">
+          <td class="name">{{ c.name }}</td>
+          <td class="desc">{{ c.description || '-' }}</td>
+
+          <td class="center">
+            <span class="badge">Activa</span>
+          </td>
+
+          <td class="right">
+            <div class="actions">
+              <button class="btn-icon" type="button" title="Editar" (click)="openEdit(c)"></button>
+              <button class="btn-icon danger" type="button" title="Eliminar" (click)="askDelete(c)"></button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- MODAL: Crear/Editar -->
+  <div class="modal-backdrop" *ngIf="isModalOpen" (click)="closeModal()"></div>
+  <div class="modal" *ngIf="isModalOpen">
+    <div class="modal-head">
+      <div>
+        <div class="modal-title">{{ editing ? 'Editar Categoría' : 'Nueva Categoría' }}</div>
+        <div class="modal-sub">Completa los datos para {{ editing ? 'editar' : 'crear' }} una nueva categoría</div>
+      </div>
+
+      <button class="modal-x" type="button" (click)="closeModal()">×</button>
+    </div>
+
+    <div class="modal-body">
+      <div class="field">
+        <label>Nombre <span class="req">*</span></label>
+        <input type="text" [(ngModel)]="formName" />
+      </div>
+
+      <div class="field">
+        <label>Descripción</label>
+        <textarea [(ngModel)]="formDescription" rows="4"></textarea>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn" type="button" (click)="closeModal()">Cancelar</button>
+        <button class="btn-primary" type="button" (click)="save()">
+          {{ editing ? 'Guardar cambios' : 'Crear Categoría' }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Delete -->
+  <div class="modal-backdrop" *ngIf="isDeleteOpen" (click)="cancelDelete()"></div>
+  <div class="modal modal-sm" *ngIf="isDeleteOpen">
+    <div class="modal-head">
+      <div class="modal-title">Eliminar Categoría</div>
+      <button class="modal-x" type="button" (click)="cancelDelete()">×</button>
+    </div>
+
+    <div class="modal-body">
+      <p class="confirm-text">
+        ¿Eliminar "{{ deleting?.name }}"? Esta acción no se puede deshacer.
+      </p>
+
+      <div class="modal-actions">
+        <button class="btn" type="button" (click)="cancelDelete()">Cancelar</button>
+        <button class="btn-danger" type="button" (click)="confirmDelete()">Eliminar</button>
+      </div>
+    </div>
+  </div>
+</div>

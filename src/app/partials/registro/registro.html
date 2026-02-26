@@ -1,0 +1,90 @@
+<div class="register-page">
+  <div class="card">
+    <div class="card-header">
+      <div class="title-wrap">
+        <h1>Crear cuenta</h1>
+        <p>Completa tus datos para registrarte</p>
+      </div>
+    </div>
+
+    <div class="card-content">
+      <form (ngSubmit)="onSubmit()" class="form" novalidate>
+        <div class="grid-2">
+          <div class="field">
+            <label for="nombre">Nombre</label>
+            <input
+              id="nombre"
+              name="nombre"
+              type="text"
+              [(ngModel)]="nombre"
+              placeholder="Tu nombre"
+              autocomplete="given-name"
+            />
+            <p class="error" *ngIf="errors['nombre'] && touched('nombre')">{{ errors['nombre'] }}</p>
+          </div>
+
+          <div class="field">
+            <label for="apellido">Apellido</label>
+            <input
+              id="apellido"
+              name="apellido"
+              type="text"
+              [(ngModel)]="apellido"
+              placeholder="Tu apellido"
+              autocomplete="family-name"
+            />
+            <p class="error" *ngIf="errors['apellido'] && touched('apellido')">{{ errors['apellido'] }}</p>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="correo">Correo</label>
+          <input
+            id="correo"
+            name="correo"
+            type="email"
+            [(ngModel)]="correo"
+            placeholder="correo@ejemplo.com"
+            autocomplete="email"
+          />
+          <p class="error" *ngIf="errors['correo'] && touched('correo')">{{ errors['correo'] }}</p>
+        </div>
+
+        <div class="field">
+          <label for="contrasena">Contraseña</label>
+          <input
+            id="contrasena"
+            name="contrasena"
+            type="password"
+            [(ngModel)]="contrasena"
+            placeholder="••••••••"
+            autocomplete="new-password"
+          />
+          <p class="error" *ngIf="errors['contrasena'] && touched('contrasena')">{{ errors['contrasena'] }}</p>
+        </div>
+
+        <div class="field">
+          <label for="confirmarContrasena">Confirmar contraseña</label>
+          <input
+            id="confirmarContrasena"
+            name="confirmarContrasena"
+            type="password"
+            [(ngModel)]="confirmarContrasena"
+            placeholder="••••••••"
+            autocomplete="new-password"
+          />
+          <p class="error" *ngIf="errors['confirmarContrasena'] && touched('confirmarContrasena')">
+            {{ errors['confirmarContrasena'] }}
+          </p>
+        </div>
+
+        <button class="btn" type="submit">Registrarme</button>
+
+        <p class="footer">
+          ¿Ya tienes cuenta?
+          <a routerLink="/login">Inicia sesión</a>
+        </p>
+      </form>
+    </div>
+  </div>
+</div>

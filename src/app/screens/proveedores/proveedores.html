@@ -1,0 +1,156 @@
+<div class="page">
+  <!-- Header -->
+  <div class="head">
+    <div class="title-area">
+      <button class="btn-back" type="button" routerLink="/dashboard">
+        Volver
+      </button>
+      <div>
+        <h1>Proveedores</h1>
+        <p>Gestiona tus proveedores y contactos</p>
+      </div>
+    </div>
+    <button class="btn-primary" type="button" (click)="openCreate()">
+      Nuevo Proveedor
+    </button>
+  </div>
+
+  <!-- Buscador -->
+  <div class="filters">
+    <div class="search">
+      <span class="search-icon" aria-hidden="true"></span>
+      <input 
+        type="text" 
+        placeholder="Buscar por empresa, contacto o email..." 
+        [(ngModel)]="searchTerm" 
+      />
+    </div>
+  </div>
+
+  <!-- Tabla -->
+  <div class="table-wrap">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Empresa</th>
+          <th>Contacto</th>
+          <th>Email</th>
+          <th>Teléfono</th>
+          <th>Dirección</th>
+          <th class="center">Estado</th>
+          <th class="right">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngIf="filtered.length === 0">
+          <td colspan="7" class="empty">No se encontraron proveedores</td>
+        </tr>
+        <tr *ngFor="let p of filtered">
+          <td class="company">{{ p.nombre_empresa }}</td>
+          <td class="contact">{{ p.nombre_contacto }}</td>
+          <td class="email">{{ p.email }}</td>
+          <td class="phone">{{ p.telefono }}</td>
+          <td class="address">{{ p.direccion || '-' }}</td>
+          <td class="center">
+            <span class="badge" [class.badge-inactive]="!p.is_active">
+              {{ p.is_active ? 'Activo' : 'Inactivo' }}
+            </span>
+          </td>
+          <td class="right">
+            <div class="actions">
+              <button class="btn-icon" type="button" title="Editar" (click)="openEdit(p)"></button>
+              <button class="btn-icon danger" type="button" title="Eliminar" (click)="askDelete(p)"></button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+    <!-- MODAL: Crear/Editar - DEBE ESTAR AL FINAL -->
+  <div class="modal-backdrop" *ngIf="isModalOpen" (click)="closeModal()"></div>
+  <div class="modal" *ngIf="isModalOpen" (click)="$event.stopPropagation()">
+    <div class="modal-head">
+      <div>
+        <div class="modal-title">{{ editing ? 'Editar Proveedor' : 'Nuevo Proveedor' }}</div>
+        <div class="modal-sub">
+          Completa los datos para {{ editing ? 'editar' : 'crear' }} un proveedor
+        </div>
+      </div>
+      <button class="modal-x" type="button" (click)="closeModal()">×</button>
+    </div>
+    
+    <div class="modal-body">
+      <div class="field">
+        <label>Nombre de la Empresa <span class="req">*</span></label>
+        <input type="text" [(ngModel)]="formNombreEmpresa" placeholder="Ej: Distribuidora López" />
+      </div>
+
+      <div class="field">
+        <label>Nombre del Contacto <span class="req">*</span></label>
+        <input type="text" [(ngModel)]="formNombreContacto" placeholder="Ej: Juan Pérez" />
+      </div>
+
+      <div class="field">
+        <label>Email <span class="req">*</span></label>
+        <input type="email" [(ngModel)]="formEmail" placeholder="Ej: contacto@empresa.com" />
+      </div>
+
+      <div class="field">
+        <label>Teléfono <span class="req">*</span></label>
+        <input type="tel" [(ngModel)]="formTelefono" placeholder="Ej: 555-123-4567" />
+      </div>
+
+      <div class="field">
+        <label>Dirección</label>
+        <textarea [(ngModel)]="formDireccion" rows="3" placeholder="Dirección completa (opcional)"></textarea>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn" type="button" (click)="closeModal()">Cancelar</button>
+        <button class="btn-primary" type="button" (click)="save()">
+          {{ editing ? 'Guardar cambios' : 'Crear Proveedor' }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Eliminar - DEBE ESTAR AL FINAL -->
+  <div class="modal-backdrop" *ngIf="isDeleteOpen" (click)="cancelDelete()"></div>
+  <div class="modal modal-sm" *ngIf="isDeleteOpen" (click)="$event.stopPropagation()">
+    <div class="modal-head">
+      <div class="modal-title">Eliminar Proveedor</div>
+      <button class="modal-x" type="button" (click)="cancelDelete()">×</button>
+    </div>
+    <div class="modal-body">
+      <p class="confirm-text">
+        ¿Eliminar a <strong>{{ deleting?.nombre_empresa }}</strong> ({{ deleting?.nombre_contacto }})? 
+        Esta acción no se puede deshacer.
+      </p>
+      <div class="modal-actions">
+        <button class="btn" type="button" (click)="cancelDelete()">Cancelar</button>
+        <button class="btn-danger" type="button" (click)="confirmDelete()">Eliminar</button>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- MODAL: Eliminar -->
+  <div class="modal-backdrop" *ngIf="isDeleteOpen" (click)="cancelDelete()"></div>
+  <div class="modal modal-sm" *ngIf="isDeleteOpen">
+    <div class="modal-head">
+      <div class="modal-title">Eliminar Proveedor</div>
+      <button class="modal-x" type="button" (click)="cancelDelete()">×</button>
+    </div>
+    <div class="modal-body">
+      <p class="confirm-text">
+        ¿Eliminar a <strong>{{ deleting?.nombre_empresa }}</strong> ({{ deleting?.nombre_contacto }})? 
+        Esta acción no se puede deshacer.
+      </p>
+      <div class="modal-actions">
+        <button class="btn" type="button" (click)="cancelDelete()">Cancelar</button>
+        <button class="btn-danger" type="button" (click)="confirmDelete()">Eliminar</button>
+      </div>
+    </div>
+  </div>
+</div>
