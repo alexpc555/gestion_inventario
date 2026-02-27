@@ -1,1 +1,195 @@
-<p>productos works!</p>
+<div class="page">
+  <!-- Header -->
+  <div class="head">
+    <div class="title-area">
+      <button class="btn-back" type="button" routerLink="/dashboard">
+        Volver
+      </button>
+      <div>
+        <h1>Productos</h1>
+        <p>Gestiona tu inventario de productos</p>
+      </div>
+    </div>
+    <button class="btn-primary" type="button" (click)="openCreate()">
+      Nuevo Producto
+    </button>
+  </div>
+
+  <!-- Buscador -->
+  <div class="filters">
+    <div class="search">
+      <span class="search-icon" aria-hidden="true"></span>
+      <input type="text" placeholder="Buscar por nombre, código, categoría o proveedor..." [(ngModel)]="searchTerm" />
+    </div>
+  </div>
+
+  <!-- Tabla -->
+  <div class="table-wrap">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Código</th>
+          <th>Nombre</th>
+          <th>Categoría</th>
+          <th>Proveedor</th>
+          <th class="right">Stock</th>
+          <th class="right">P. Compra</th>
+          <th class="right">P. Venta</th>
+          <th class="center">Estado</th>
+          <th class="right">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngIf="filtered.length === 0">
+          <td colspan="9" class="empty">No se encontraron productos</td>
+        </tr>
+        <tr *ngFor="let p of filtered">
+          <td class="code">{{ p.codigo }}</td>
+          <td class="name">{{ p.nombre }}</td>
+          <td>{{ p.categoria_nombre }}</td>
+          <td>{{ p.proveedor_nombre }}</td>
+          <td class="right" [class.stock-bajo]="p.stock <= 5">
+            {{ p.stock }}
+          </td>
+          <td class="right">{{ formatCurrency(p.precio_compra) }}</td>
+          <td class="right">{{ formatCurrency(p.precio_venta) }}</td>
+          <td class="center">
+            <span class="badge" [class.badge-inactive]="!p.is_active">
+              {{ p.is_active ? 'Activo' : 'Inactivo' }}
+            </span>
+          </td>
+          <td class="right">
+            <div class="actions">
+              <button class="btn-icon stock" type="button" title="Ajustar Stock" (click)="openStockModal(p)">📦</button>
+              <button class="btn-icon" type="button" title="Editar" (click)="openEdit(p)">✏️</button>
+              <button class="btn-icon danger" type="button" title="Eliminar" (click)="askDelete(p)">🗑️</button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- MODAL: Crear/Editar Producto -->
+  <div class="modal-backdrop" *ngIf="isModalOpen" (click)="closeModal()"></div>
+  <div class="modal" *ngIf="isModalOpen" (click)="$event.stopPropagation()">
+    <div class="modal-head">
+      <div>
+        <div class="modal-title">{{ editing ? 'Editar Producto' : 'Nuevo Producto' }}</div>
+        <div class="modal-sub">
+          Completa los datos para {{ editing ? 'editar' : 'crear' }} un producto
+        </div>
+      </div>
+      <button class="modal-x" type="button" (click)="closeModal()">×</button>
+    </div>
+
+    <div class="modal-body">
+      <div class="field">
+        <label>Código <span class="req">*</span></label>
+        <input type="text" [(ngModel)]="formCodigo" placeholder="Ej: PROD-001" />
+      </div>
+
+      <div class="field">
+        <label>Nombre <span class="req">*</span></label>
+        <input type="text" [(ngModel)]="formNombre" placeholder="Ej: Laptop HP Pavilion" />
+      </div>
+
+      <div class="field">
+        <label>Descripción</label>
+        <textarea [(ngModel)]="formDescripcion" rows="3" placeholder="Descripción del producto (opcional)"></textarea>
+      </div>
+
+      <div class="field">
+        <label>Categoría <span class="req">*</span></label>
+        <select [(ngModel)]="formCategoria">
+          <option [value]="0" disabled selected>Selecciona una categoría</option>
+          <option *ngFor="let c of categorias" [value]="c.id">{{ c.name }}</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Proveedor <span class="req">*</span></label>
+        <select [(ngModel)]="formProveedor">
+          <option [value]="0" disabled selected>Selecciona un proveedor</option>
+          <option *ngFor="let p of proveedores" [value]="p.id">{{ p.nombre_empresa }}</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Stock inicial <span class="req">*</span></label>
+        <input type="number" [(ngModel)]="formStock" min="0" />
+      </div>
+
+      <div class="field">
+        <label>Precio Compra <span class="req">*</span></label>
+        <input type="number" [(ngModel)]="formPrecioCompra" min="0" step="0.01" />
+      </div>
+
+      <div class="field">
+        <label>Precio Venta <span class="req">*</span></label>
+        <input type="number" [(ngModel)]="formPrecioVenta" min="0" step="0.01" />
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn" type="button" (click)="closeModal()">Cancelar</button>
+        <button class="btn-primary" type="button" (click)="save()">
+          {{ editing ? 'Guardar cambios' : 'Crear Producto' }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Ajustar Stock -->
+  <div class="modal-backdrop" *ngIf="isStockModalOpen" (click)="closeStockModal()"></div>
+  <div class="modal modal-sm" *ngIf="isStockModalOpen" (click)="$event.stopPropagation()">
+    <div class="modal-head">
+      <div class="modal-title">Ajustar Stock</div>
+      <button class="modal-x" type="button" (click)="closeStockModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <p class="confirm-text">
+        Producto: <strong>{{ ajustandoStock?.nombre }}</strong><br>
+        Stock actual: <strong>{{ ajustandoStock?.stock }}</strong>
+      </p>
+
+      <div class="field">
+        <label>Operación</label>
+        <select [(ngModel)]="stockOperacion">
+          <option value="sumar">Sumar stock</option>
+          <option value="restar">Restar stock</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Cantidad</label>
+        <input type="number" [(ngModel)]="stockCantidad" min="1" />
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn" type="button" (click)="closeStockModal()">Cancelar</button>
+        <button class="btn-primary" type="button" (click)="ajustarStock()">
+          Ajustar Stock
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Eliminar -->
+  <div class="modal-backdrop" *ngIf="isDeleteOpen" (click)="cancelDelete()"></div>
+  <div class="modal modal-sm" *ngIf="isDeleteOpen" (click)="$event.stopPropagation()">
+    <div class="modal-head">
+      <div class="modal-title">Eliminar Producto</div>
+      <button class="modal-x" type="button" (click)="cancelDelete()">×</button>
+    </div>
+    <div class="modal-body">
+      <p class="confirm-text">
+        ¿Eliminar el producto <strong>{{ deleting?.nombre }}</strong> ({{ deleting?.codigo }})?
+        Esta acción no se puede deshacer.
+      </p>
+      <div class="modal-actions">
+        <button class="btn" type="button" (click)="cancelDelete()">Cancelar</button>
+        <button class="btn-danger" type="button" (click)="confirmDelete()">Eliminar</button>
+      </div>
+    </div>
+  </div>
+</div>

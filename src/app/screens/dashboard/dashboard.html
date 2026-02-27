@@ -3,7 +3,6 @@
   <aside class="sidebar">
     <div class="brand">
       <div class="brand-icon" aria-hidden="true">
-        <!-- cubo simple -->
         <svg viewBox="0 0 24 24" class="icon">
           <path
             d="M21 8.5V16a2 2 0 0 1-1 1.73l-7 4a2 2 0 0 1-2 0l-7-4A2 2 0 0 1 3 16V8.5"
@@ -15,7 +14,6 @@
           />
         </svg>
       </div>
-
       <div class="brand-text">
         <div class="brand-title">Inventario</div>
         <div class="brand-sub">Sistema de Gestión</div>
@@ -29,10 +27,15 @@
       <a class="nav-item" routerLink="/productos">Productos</a>
       <a class="nav-item" routerLink="/categorias">Categorías</a>
       <a class="nav-item" routerLink="/proveedores">Proveedores</a>
-      <a class="nav-item" routerLink="/movimientos">Movimientos</a>
     </nav>
 
-    <div class="sidebar-footer">© 2026 Sistema de Inventario</div>
+    <div class="sidebar-footer">
+      <button class="logout-btn" (click)="logout()">
+        <span class="logout-icon">↪</span>
+        Cerrar Sesión
+      </button>
+      <div class="copyright">© 2026 Sistema de Inventario</div>
+    </div>
   </aside>
 
   <!-- MAIN -->
@@ -40,21 +43,12 @@
     <!-- TOPBAR -->
     <header class="topbar">
       <button class="burger" type="button" aria-label="Abrir menú">☰</button>
-
-      <div class="search">
-        <span class="search-ico" aria-hidden="true">⌕</span>
-        <input type="text" placeholder="Buscar productos, categorías, proveedores..." />
-      </div>
-
-      <div class="top-actions">
-        <button class="icon-btn" type="button" aria-label="Notificaciones">
-          <span class="bell" aria-hidden="true">●</span>
-          <span class="dot">4</span>
-        </button>
-        <button class="icon-btn" type="button" aria-label="Usuario">
-          <span class="user" aria-hidden="true">●</span>
-        </button>
-      </div>
+      <div class="topbar-title">Dashboard</div>
+      <div class="spacer"></div>
+      <button class="logout-btn-mobile" (click)="logout()">
+        <span class="logout-icon">↪</span>
+        Salir
+      </button>
     </header>
 
     <!-- CONTENT -->
@@ -67,96 +61,69 @@
 
         <!-- KPIs -->
         <div class="kpi-grid">
+          <!-- Total Productos -->
           <div class="card">
             <div class="card-head">
               <div class="card-title">Total Productos</div>
               <div class="card-ico"></div>
             </div>
             <div class="kpi-value">{{ totalProducts }}</div>
-            <div class="kpi-sub">{{ activeProducts }} activos</div>
+            <div class="kpi-sub">Productos activos</div>
           </div>
 
+          <!-- Valor de Compra -->
           <div class="card">
             <div class="card-head">
-              <div class="card-title">Valor Inventario</div>
+              <div class="card-title">Valor de Compra</div>
               <div class="card-ico"></div>
             </div>
-            <div class="kpi-value">${{ totalInventoryValue | number }}</div>
-            <div class="kpi-sub kpi-up">↗ Valor venta: ${{ totalSaleValue | number }}</div>
+            <div class="kpi-value">${{ totalCompra | number:'1.2-2' }}</div>
+            <div class="kpi-sub">Inversión total</div>
           </div>
 
+          <!-- Valor de Venta -->
           <div class="card">
             <div class="card-head">
-              <div class="card-title">Stock Bajo</div>
-              <div class="card-ico warn"></div>
+              <div class="card-title">Valor de Venta</div>
+              <div class="card-ico"></div>
             </div>
-            <div class="kpi-value">{{ lowStockProducts }}</div>
-            <div class="kpi-sub">Requieren atención</div>
+            <div class="kpi-value">${{ totalVenta | number:'1.2-2' }}</div>
+            <div class="kpi-sub kpi-up">Ganancia: ${{ potentialProfit | number:'1.2-2' }}</div>
           </div>
 
-          <div class="card card-danger">
+          <!-- Stock Total -->
+          <div class="card">
             <div class="card-head">
-              <div class="card-title">Stock Crítico</div>
-              <div class="card-ico danger"></div>
+              <div class="card-title">Stock Total</div>
+              <div class="card-ico"></div>
             </div>
-            <div class="kpi-value danger-text">{{ criticalStockProducts }}</div>
-            <div class="kpi-sub">{{ outOfStockProducts }} sin stock</div>
+            <div class="kpi-value">{{ totalStock }}</div>
+            <div class="kpi-sub">Unidades en inventario</div>
+          </div>
+
+          <!-- Categorías -->
+          <div class="card">
+            <div class="card-head">
+              <div class="card-title">Categorías</div>
+              <div class="card-ico"></div>
+            </div>
+            <div class="kpi-value">{{ totalCategorias }}</div>
+            <div class="kpi-sub">Categorías activas</div>
+          </div>
+
+          <!-- Proveedores -->
+          <div class="card">
+            <div class="card-head">
+              <div class="card-title">Proveedores</div>
+              <div class="card-ico"></div>
+            </div>
+            <div class="kpi-value">{{ totalProveedores }}</div>
+            <div class="kpi-sub">Proveedores activos</div>
           </div>
         </div>
 
-        <!-- Alertas -->
-        <div class="grid-2">
-          <!-- Alertas Críticas -->
-          <div class="card card-pad">
-            <div class="section-title">Alertas Críticas</div>
-            <div class="section-sub">Productos con stock crítico que requieren acción inmediata</div>
-
-            <div class="list">
-              <div class="empty" *ngIf="criticalAlerts.length === 0">
-                No hay alertas críticas
-              </div>
-
-              <button
-                *ngFor="let a of criticalAlerts"
-                class="list-item"
-                type="button"
-                (click)="go('/productos')"
-              >
-                <div class="li-main">
-                  <div class="li-title">{{ a.name }}</div>
-                  <div class="li-sub">Stock: {{ a.currentStock }} / Mínimo: {{ a.minimumStock }}</div>
-                </div>
-                <span class="badge badge-danger">Crítico</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- Alertas Reabastecimiento -->
-          <div class="card card-pad">
-            <div class="section-title">Alertas de Reabastecimiento</div>
-            <div class="section-sub">Productos que necesitan reabastecimiento pronto</div>
-
-            <div class="list">
-              <div class="empty" *ngIf="highAlerts.length === 0">
-                No hay alertas de reabastecimiento
-              </div>
-
-              <button
-                *ngFor="let a of highAlerts"
-                class="list-item"
-                type="button"
-                (click)="go('/productos')"
-              >
-                <div class="li-main">
-                  <div class="li-title">{{ a.name }}</div>
-                  <div class="li-sub">Stock: {{ a.currentStock }} / Reorden: {{ a.reorderPoint }}</div>
-                </div>
-                <span class="badge badge-warn">Alto</span>
-              </button>
-            </div>
-          </div>
-        </div>
-        
+        <!-- Espacio inferior -->
+        <div style="height: 20px;"></div>
       </div>
     </section>
   </main>

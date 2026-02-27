@@ -22,6 +22,12 @@ export const routes: Routes = [
     canActivate: [authGuard],
     loadComponent: () => import('./screens/proveedores/proveedores').then(m => m.ProveedoresComponent)
   },
+    {
+    path: 'productos',
+    canActivate: [authGuard],
+    loadComponent: () => import('./screens/productos/productos').then(m => m.ProductosComponent)
+  },
+  
   
 
   { path: '**', redirectTo: 'login' },

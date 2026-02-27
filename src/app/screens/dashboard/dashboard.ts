@@ -1,16 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { SHARED_IMPORTS } from '../../shared/shared.imports';
 import { Router } from '@angular/router';
-
-type AlertPriority = 'CRITICAL' | 'HIGH';
-
-interface ProductAlert {
-  name: string;
-  currentStock: number;
-  minimumStock?: number;
-  reorderPoint?: number;
-  priority: AlertPriority;
-}
+import { AuthService } from '../../services/tools/auth.services';
+import { DashboardService, DashboardStats } from '../../services/tools/dashboard.services';
 
 @Component({
   selector: 'app-dashboard',
@@ -19,33 +11,70 @@ interface ProductAlert {
   templateUrl: './dashboard.html',
   styleUrls: ['./dashboard.scss'],
 })
-export class DashboardComponent {
-  // --- KPIs (mock por ahora)
-  totalProducts = 7;
-  activeProducts = 7;
+export class DashboardComponent implements OnInit {
+  // KPIs
+  totalProducts = 0;
+  totalCompra = 0;
+  totalVenta = 0;
+  totalStock = 0;
+  totalCategorias = 0;
+  totalProveedores = 0;
+  potentialProfit = 0;
 
-  totalInventoryValue = 8196;
-  totalSaleValue = 13107;
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+    private dashboardService: DashboardService
+  ) {
+    console.log('✅ DashboardComponent constructor');
+  }
 
-  lowStockProducts = 1;
-  criticalStockProducts = 3;
-  outOfStockProducts = 1;
+  ngOnInit(): void {
+    console.log('✅ DashboardComponent ngOnInit');
+    this.loadStats();
+  }
 
-  criticalAlerts: ProductAlert[] = [
-    { name: 'Mouse Logitech MX Master', currentStock: 3, minimumStock: 10, priority: 'CRITICAL' },
-    { name: 'Jeans Denim Premium', currentStock: 2, minimumStock: 15, priority: 'CRITICAL' },
-    { name: 'Monitor 27" 4K', currentStock: 0, minimumStock: 3, priority: 'CRITICAL' },
-  ];
-
-  highAlerts: ProductAlert[] = [
-    { name: 'Laptop HP ProBook', currentStock: 8, reorderPoint: 10, priority: 'HIGH' },
-  ];
-
-  constructor(private router: Router) {}
+  loadStats() {
+    console.log('📡 Cargando estadísticas del dashboard...');
+    
+    this.dashboardService.getStats().subscribe({
+      next: (data: DashboardStats) => {
+        console.log('✅ Datos recibidos del backend:', data);
+        
+        this.totalProducts = data.total_products;
+        this.totalCompra = data.total_compra;
+        this.totalVenta = data.total_venta;
+        this.totalStock = data.total_stock;
+        this.totalCategorias = data.total_categorias;
+        this.totalProveedores = data.total_proveedores;
+        this.potentialProfit = data.total_venta - data.total_compra;
+        
+        console.log('📊 Valores actualizados:', {
+          totalProducts: this.totalProducts,
+          totalCompra: this.totalCompra,
+          totalVenta: this.totalVenta,
+          totalStock: this.totalStock,
+          totalCategorias: this.totalCategorias,
+          totalProveedores: this.totalProveedores,
+          potentialProfit: this.potentialProfit
+        });
+      },
+      error: (err) => {
+        console.log('❌ Error cargando estadísticas:', err);
+        console.log('❌ Status:', err.status);
+        console.log('❌ Message:', err.message);
+        console.log('❌ URL:', err.url);
+      }
+    });
+  }
 
   go(path: string) {
-    // Cambia estas rutas cuando tengas las pantallas reales
-    // ejemplo: this.router.navigateByUrl('/productos')
     this.router.navigateByUrl(path);
+  }
+
+  logout() {
+    console.log('🚪 Cerrando sesión...');
+    this.authService.logout();
+    this.router.navigateByUrl('/login');
   }
 }
