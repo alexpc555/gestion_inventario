@@ -63,60 +63,42 @@
         <div class="kpi-grid">
           <!-- Total Productos -->
           <div class="card">
-            <div class="card-head">
-              <div class="card-title">Total Productos</div>
-              <div class="card-ico"></div>
-            </div>
+            <div class="card-title">Total Productos</div>
             <div class="kpi-value">{{ totalProducts }}</div>
             <div class="kpi-sub">Productos activos</div>
           </div>
 
           <!-- Valor de Compra -->
           <div class="card">
-            <div class="card-head">
-              <div class="card-title">Valor de Compra</div>
-              <div class="card-ico"></div>
-            </div>
+            <div class="card-title">Valor de Compra</div>
             <div class="kpi-value">${{ totalCompra | number:'1.2-2' }}</div>
             <div class="kpi-sub">Inversión total</div>
           </div>
 
           <!-- Valor de Venta -->
           <div class="card">
-            <div class="card-head">
-              <div class="card-title">Valor de Venta</div>
-              <div class="card-ico"></div>
-            </div>
+            <div class="card-title">Valor de Venta</div>
             <div class="kpi-value">${{ totalVenta | number:'1.2-2' }}</div>
             <div class="kpi-sub kpi-up">Ganancia: ${{ potentialProfit | number:'1.2-2' }}</div>
           </div>
 
           <!-- Stock Total -->
           <div class="card">
-            <div class="card-head">
-              <div class="card-title">Stock Total</div>
-              <div class="card-ico"></div>
-            </div>
+            <div class="card-title">Stock Total</div>
             <div class="kpi-value">{{ totalStock }}</div>
             <div class="kpi-sub">Unidades en inventario</div>
           </div>
 
           <!-- Categorías -->
           <div class="card">
-            <div class="card-head">
-              <div class="card-title">Categorías</div>
-              <div class="card-ico"></div>
-            </div>
+            <div class="card-title">Categorías</div>
             <div class="kpi-value">{{ totalCategorias }}</div>
             <div class="kpi-sub">Categorías activas</div>
           </div>
 
           <!-- Proveedores -->
           <div class="card">
-            <div class="card-head">
-              <div class="card-title">Proveedores</div>
-              <div class="card-ico"></div>
-            </div>
+            <div class="card-title">Proveedores</div>
             <div class="kpi-value">{{ totalProveedores }}</div>
             <div class="kpi-sub">Proveedores activos</div>
           </div>

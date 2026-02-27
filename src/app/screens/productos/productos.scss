@@ -121,7 +121,7 @@
   background: #fff;
   border: 1px solid rgba(0,0,0,0.08);
   border-radius: 16px;
-  overflow: hidden;
+  overflow-x: auto;
   box-shadow: 0 12px 28px rgba(0,0,0,0.06);
 }
 
@@ -129,6 +129,7 @@
   width: 100%;
   border-collapse: collapse;
   font-size: 13px;
+  min-width: 1200px;
 }
 
 .table th,
@@ -136,13 +137,26 @@
   padding: 14px 16px;
   border-bottom: 1px solid rgba(0,0,0,0.06);
   vertical-align: middle;
+  white-space: nowrap;
 }
 
 .table th {
   text-align: left;
   font-weight: 900;
   background: #fbfbfd;
+  color: #0b0b14;
 }
+
+/* Anchuras específicas para cada columna */
+.table th:nth-child(1), .table td:nth-child(1) { width: 100px; }
+.table th:nth-child(2), .table td:nth-child(2) { width: 200px; }
+.table th:nth-child(3), .table td:nth-child(3) { width: 120px; }
+.table th:nth-child(4), .table td:nth-child(4) { width: 150px; }
+.table th:nth-child(5), .table td:nth-child(5) { width: 80px; text-align: right; }
+.table th:nth-child(6), .table td:nth-child(6) { width: 100px; text-align: right; }
+.table th:nth-child(7), .table td:nth-child(7) { width: 100px; text-align: right; }
+.table th:nth-child(8), .table td:nth-child(8) { width: 100px; text-align: center; }
+.table th:nth-child(9), .table td:nth-child(9) { width: 120px; text-align: right; }
 
 .table tbody tr:hover {
   background: #fafafe;
@@ -156,10 +170,15 @@
   text-align: center;
 }
 
+td:nth-child(5), td:nth-child(6), td:nth-child(7) {
+  font-family: 'Courier New', monospace;
+  font-weight: 500;
+}
+
 .code {
   font-weight: 900;
   color: #0b0b14;
-  font-family: monospace;
+  font-family: 'Courier New', monospace;
 }
 
 .name {
@@ -175,6 +194,7 @@
 .badge {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   height: 26px;
   padding: 0 10px;
   border-radius: 999px;
@@ -183,6 +203,7 @@
   color: #16a34a;
   font-weight: 900;
   font-size: 12px;
+  min-width: 60px;
 }
 
 .badge-inactive {
@@ -193,14 +214,15 @@
 
 .actions {
   display: inline-flex;
-  gap: 10px;
+  gap: 8px;
   justify-content: flex-end;
+  align-items: center;
 }
 
 .btn-icon {
-  width: 34px;
-  height: 34px;
-  border-radius: 12px;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
   border: 1px solid rgba(0,0,0,0.08);
   background: #fff;
   cursor: pointer;
@@ -208,10 +230,13 @@
   align-items: center;
   justify-content: center;
   font-size: 16px;
+  transition: all 0.2s ease;
 }
 
 .btn-icon:hover {
   background: #f7f7fb;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
 }
 
 .btn-icon.danger {
@@ -219,27 +244,39 @@
   color: #e11d48;
 }
 
+.btn-icon.danger:hover {
+  background: #e11d48;
+  color: #fff;
+}
+
 .btn-icon.stock {
   border-color: rgba(59,130,246,0.25);
   color: #3b82f6;
 }
 
-.empty {
-  text-align: center;
-  padding: 22px 0;
-  color: #717182;
+.btn-icon.stock:hover {
+  background: #3b82f6;
+  color: #fff;
 }
 
-/* MODAL STYLES - CORREGIDO */
+.empty {
+  text-align: center;
+  padding: 32px 0;
+  color: #717182;
+  font-size: 14px;
+}
+
+/* MODAL STYLES - CORREGIDOS */
 .modal-backdrop {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(3,2,19,0.5);
-  backdrop-filter: blur(4px);
-  z-index: 1000;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3); /* Cambiado a un gris más claro */
+  backdrop-filter: blur(2px); /* Añadido efecto blur */
+  z-index: 1000; /* Aumentado z-index */
+  animation: fadeIn 0.2s ease;
 }
 
 .modal {
@@ -248,42 +285,61 @@
   left: 50%;
   transform: translate(-50%, -50%);
   width: min(760px, calc(100vw - 32px));
-  max-height: calc(100vh - 32px);
+  max-height: calc(90vh - 32px);
   background: #fff;
-  border-radius: 20px;
-  border: 1px solid rgba(0,0,0,0.08);
-  box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
-  z-index: 1001;
+  border-radius: 20px; /* Aumentado border-radius */
+  border: 1px solid rgba(255,255,255,0.1);
+  box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); /* Mejorada la sombra */
+  z-index: 1001; /* Aumentado z-index */
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  animation: slideUp 0.3s ease;
 }
 
 .modal-sm {
   width: min(520px, calc(100vw - 32px));
 }
 
+/* Animaciones */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -40%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
+
 .modal-head {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  padding: 20px 24px;
+  padding: 20px 24px; /* Aumentado padding */
   border-bottom: 1px solid rgba(0,0,0,0.08);
   gap: 12px;
-  background: #fbfbfd;
+  background: #ffffff;
   flex-shrink: 0;
 }
 
 .modal-title {
   font-weight: 900;
-  font-size: 20px;
+  font-size: 20px; /* Aumentado tamaño */
   letter-spacing: -0.02em;
+  color: #0b0b14;
 }
 
 .modal-sub {
   margin-top: 4px;
   color: #717182;
-  font-size: 13px;
+  font-size: 14px; /* Aumentado tamaño */
 }
 
 .modal-x {
@@ -291,7 +347,7 @@
   height: 36px;
   border-radius: 12px;
   border: 1px solid rgba(0,0,0,0.08);
-  background: #fff;
+  background: #f8fafc;
   cursor: pointer;
   font-size: 20px;
   line-height: 1;
@@ -299,15 +355,18 @@
   align-items: center;
   justify-content: center;
   transition: all 0.2s ease;
+  color: #64748b;
 }
 
 .modal-x:hover {
-  background: #f2f3f7;
+  background: #f1f5f9;
   border-color: rgba(0,0,0,0.12);
+  color: #0b0b14;
+  transform: rotate(90deg);
 }
 
 .modal-body {
-  padding: 24px;
+  padding: 24px; /* Aumentado padding */
   overflow-y: auto;
   flex: 1;
 }
@@ -315,7 +374,7 @@
 .field {
   display: grid;
   gap: 8px;
-  margin-bottom: 20px;
+  margin-bottom: 20px; /* Aumentado margen */
 }
 
 label {
@@ -333,9 +392,9 @@ input, select, textarea {
   border-radius: 12px;
   border: 1px solid rgba(0,0,0,0.08);
   background: #f8fafc;
-  padding: 12px 16px;
+  padding: 12px 16px; /* Aumentado padding */
   outline: none;
-  font-size: 14px;
+  font-size: 14px; /* Aumentado tamaño */
   box-sizing: border-box;
   transition: all 0.2s ease;
 }
@@ -355,27 +414,31 @@ input:focus, select:focus, textarea:focus {
   display: flex;
   justify-content: flex-end;
   gap: 12px;
-  margin-top: 24px;
+  margin-top: 24px; /* Aumentado margen */
   padding-top: 16px;
   border-top: 1px solid rgba(0,0,0,0.08);
   background: #fff;
+  flex-shrink: 0;
 }
 
 .btn {
-  height: 44px;
-  padding: 0 20px;
+  height: 44px; /* Aumentado altura */
+  padding: 0 20px; /* Aumentado padding */
   border-radius: 12px;
   border: 1px solid rgba(0,0,0,0.08);
   background: #fff;
   cursor: pointer;
   font-weight: 800;
-  font-size: 14px;
+  font-size: 14px; /* Aumentado tamaño */
   transition: all 0.2s ease;
+  color: #1e293b;
 }
 
 .btn:hover {
-  background: #f2f3f7;
+  background: #f1f5f9;
   border-color: rgba(0,0,0,0.12);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
 }
 
 .btn-danger {
@@ -395,16 +458,33 @@ input:focus, select:focus, textarea:focus {
   background: #c71f3f;
   transform: translateY(-1px);
   box-shadow: 0 8px 16px rgba(225,29,72,0.2);
+  border-color: transparent;
 }
 
 .confirm-text {
-  margin: 0 0 16px 0;
-  color: #111827;
+  margin: 0 0 20px 0;
+  color: #1e293b;
   line-height: 1.6;
   font-size: 15px;
 }
 
 /* responsive */
+@media (max-width: 1400px) {
+  .table th:nth-child(1), .table td:nth-child(1) { width: 90px; }
+  .table th:nth-child(2), .table td:nth-child(2) { width: 180px; }
+  .table th:nth-child(4), .table td:nth-child(4) { width: 140px; }
+}
+
+@media (max-width: 1200px) {
+  .table {
+    min-width: 1100px;
+  }
+  
+  .table th:nth-child(1), .table td:nth-child(1) { width: 80px; }
+  .table th:nth-child(2), .table td:nth-child(2) { width: 160px; }
+  .table th:nth-child(4), .table td:nth-child(4) { width: 130px; }
+}
+
 @media (max-width: 640px) {
   .page {
     padding: 12px;
@@ -435,18 +515,10 @@ input:focus, select:focus, textarea:focus {
     max-width: none;
   }
   
-  .table {
-    font-size: 12px;
-  }
-  
-  .table th, 
-  .table td {
-    padding: 12px 8px;
-  }
-  
   .modal {
     width: calc(100vw - 16px);
     max-height: calc(100vh - 16px);
+    border-radius: 16px;
   }
   
   .modal-head {
@@ -464,5 +536,10 @@ input:focus, select:focus, textarea:focus {
   
   .modal-actions button {
     width: 100%;
+  }
+  
+  .modal-x {
+    width: 40px;
+    height: 40px;
   }
 }
